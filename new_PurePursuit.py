@@ -32,9 +32,6 @@ def shortPath():
         else:
             path_select = False 
 
-
-        
-         
     except ValueError :
         print('Value Error')
         raise 
@@ -42,7 +39,6 @@ def shortPath():
 
 #setup
 Tr = Turtle()
-
 wn = Screen()
 wn.title('Pure Pursuit')
 setup(500,500)
