@@ -1,5 +1,6 @@
 from turtle import * 
 import numpy as np
+from sympy import Symbol,solve
 
 #setup
 Tr = Turtle()
@@ -71,7 +72,16 @@ print('Vector B is ',vecP)
 print('Vertical Point is ({0:.3f},{1:.3f})'.format(vertical_X,vertical_Y))
 
 #step 4 
-#create Circle from vertiacl piont
+#find the cut point with circle cut line 
+"""
+x = Symbol('x')
+y = Symbol('y')
+print(solve((x-100)**2+(y**2)-52**2))
+"""
+y = 0 #equation of path 
+x1 = -1*np.sqrt(-y**2 +2704) + 100 
+x2 = np.sqrt(-y**2 + 2704) +100 
+print('Cut Point is ({0:.3f},{1:.3f})'.format(x1,x2))
 
 
 
