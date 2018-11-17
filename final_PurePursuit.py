@@ -1,14 +1,5 @@
 from turtle import * 
 import numpy as np
-import math 
-
-def normDistance(x1,x2,y1,y2):
-        x = (x2 - x1)**2 
-        y = (y2 - y1)**2 
-        xy = x+y 
-        l = math.sqrt(xy)
-        return l 
-
 
 #setup
 Tr = Turtle()
@@ -34,17 +25,53 @@ penup()
 #start 
 start_point = [100,100]
 goto(start_point)
-path = [-150,0],[150,0]
+path = np.array([[-150,0],[150,0]])
 stop_point = [-150,0]
 seth(0)
 speed(3)
 showturtle()
 
 #step 1 
-pos = pos()
-l1 = normDistance(pos[0],-150,pos[1],0)
-l2 = normDistance(pos[0],150,pos[1],0)
-print(l2)
+pos = pos() #(x,y) current position 
+
+l1 = np.linalg.norm(pos-path[0])
+l2 = np.linalg.norm(pos-path[1])
+print('Line 1st = {0:.3f}'.format(l1))
+print('Line 2st = {0:.3f}'.format(l2))
+
+#step 2 
+if l1 > l2 :
+        nearPoint = path[1]
+        farPoint = path[0]
+        print('Near Point is ',nearPoint)
+        print('Far Point is ',farPoint)
+else :
+        nearPoint = path[0]
+        farPoint = path[1]
+        print('Near Point is ',nearPoint)
+        print('Far Point is ',farPoint)
+
+#step 3 
+#vector A is Path 
+#vector B is Current position 
+A = [farPoint[0]-nearPoint[0],farPoint[1]-nearPoint[1]]
+B = [pos[0]-nearPoint[0],pos[1]-nearPoint[1]]
+sizeA = np.linalg.norm(nearPoint-farPoint)
+powerSizeA = np.square(sizeA)
+vecA = np.array(A)
+vecB = np.array(B)
+AdotB = np.dot(vecA,vecB)
+P = AdotB/powerSizeA
+vecP = P*np.array(vecA)
+vertical_X = vecP[0]+nearPoint[0]
+vertical_Y = vecP[1]+nearPoint[1]
+print('Vector A is ',vecA)
+print('Vector B is ',vecB)
+print('Vector B is ',vecP)
+print('Vertical Point is ({0:.3f},{1:.3f})'.format(vertical_X,vertical_Y))
+
+#step 4 
+#create Circle from vertiacl piont
 
 
 
