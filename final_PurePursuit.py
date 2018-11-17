@@ -1,6 +1,7 @@
 from turtle import * 
 import numpy as np
-from sympy import Symbol,solve
+import math
+
 
 #setup
 Tr = Turtle()
@@ -28,7 +29,7 @@ start_point = [100,100]
 goto(start_point)
 path = np.array([[-150,0],[150,0]])
 stop_point = [-150,0]
-seth(0)
+seth(225)
 speed(3)
 showturtle()
 
@@ -73,16 +74,32 @@ print('Vertical Point is ({0:.3f},{1:.3f})'.format(vertical_X,vertical_Y))
 
 #step 4 
 #find the cut point with circle cut line 
-"""
-x = Symbol('x')
-y = Symbol('y')
-print(solve((x-100)**2+(y**2)-52**2))
-"""
 y = 0 #equation of path 
-x1 = -1*np.sqrt(-y**2 +2704) + 100 
-x2 = np.sqrt(-y**2 + 2704) +100 
+x1 = -1*np.sqrt(-y**2 +2704) + start_point[0] 
+x2 = np.sqrt(-y**2 + 2704) + start_point[0]  
 print('Cut Point is ({0:.3f},{1:.3f})'.format(x1,x2))
 
+#step 5
+if np.linalg.norm(np.array([x1,0])-stop_point) < np.linalg.norm(np.array([x2,0])-stop_point) :
+        goalPoint = [x1,y] 
+else:
+        goalPoint = [x2,y] 
+print('Select Goal Point = ',goalPoint)
 
+#step 6 
+angle_H = heading()
+fc_x = math.cos(math.radians(angle_H))
+fc_y = math.sin(math.radians(angle_H)) 
+fc = 52 * np.array([fc_x,fc_y])
+fronCar = np.add(pos,fc) 
+ld = np.linalg.norm(pos-goalPoint)
+eld = np.linalg.norm(fronCar-goalPoint)
+Alpha = np.arcsin(eld/ld)
+Zixmar = math.degrees((2*52)*np.sin(Alpha)/ld)
+Theta = (20/52)*np.tan(Zixmar)
+
+seth(180+Zixmar)
+print(heading())
+fd(20)
 
 done()
