@@ -26,13 +26,14 @@ goto(150,0)
 penup()
 
 #start 
-start_point = [100,100]
+start_point = [100,-100]
 goto(start_point)
 path = np.array([[-150,0],[150,0]])
-stop_point = [150,0]
+stop_point = [-150,0]
 seth(180)
 speed(7)
 showturtle()
+
 
 
 while True: 
@@ -85,14 +86,14 @@ while True:
         #step 4 
         #find the cut point with circle cut line 
         if pos_car[1] <= 3 and pos_car[1] >= -3: 
-                        L = 5
+                        L = 10
         else:
                         L = 52
         y = 0 #equation of path 
         x1 = -1*np.sqrt(-y**2 + L**2) + pos_car[0] 
         x2 = np.sqrt(-y**2 + L**2) + pos_car[0]  
         print('Cut Point is ({0:.3f},{1:.3f})'.format(x1,x2))
-
+        
         #step 5
         if np.linalg.norm(np.array([x1,0])-stop_point) < np.linalg.norm(np.array([x2,0])-stop_point) :
                 goalPoint = [x1,y] 
@@ -114,7 +115,7 @@ while True:
                 V =2
                 Zixmar = math.degrees(((V*L)*np.sin(Alpha))/ld)
                 Theta = (V/L)*np.tan(Zixmar)
-                
+               
                 
         except ValueError : 
                 print('NaN')
@@ -122,7 +123,7 @@ while True:
         #step 7 
         speed(1)
         print('Zixmar =',Zixmar)
-        if pos_car[1] >= 0 : 
+        if pos_car[1] > 0 : 
                 angleCar = 180+Zixmar
         else:
                 angleCar = 180-Zixmar
