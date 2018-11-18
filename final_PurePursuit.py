@@ -97,14 +97,14 @@ for i in range(91):
         eld = np.linalg.norm(fronCar-goalPoint)
         Alpha = np.arcsin(eld/ld)
         if pos_car[1] <= 3 and pos_car[1] >= -3 : 
-                L = 15
+                L = 10
         else:
                 L =52
         Zixmar = math.degrees((3*L)*np.sin(Alpha)/ld)
         Theta = (3/L)*np.tan(Zixmar)
 
-        if Zixmar > 35 :
-                Zixmar = 35 
+        if Zixmar > 30 :
+                Zixmar = 30 
         else:
                 Zixmar = Zixmar
 
