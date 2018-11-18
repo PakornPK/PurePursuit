@@ -26,10 +26,10 @@ goto(150,0)
 penup()
 
 #start 
-start_point = [100,-100]
+start_point = [0,0]
 goto(start_point)
 path = np.array([[-150,0],[150,0]])
-stop_point = [-150,0]
+stop_point = [150,0]
 seth(180)
 speed(7)
 showturtle()
@@ -85,10 +85,7 @@ while True:
 
         #step 4 
         #find the cut point with circle cut line 
-        if pos_car[1] <= 3 and pos_car[1] >= -3: 
-                        L = 10
-        else:
-                        L = 52
+        L = 52
         y = 0 #equation of path 
         x1 = -1*np.sqrt(-y**2 + L**2) + pos_car[0] 
         x2 = np.sqrt(-y**2 + L**2) + pos_car[0]  
@@ -133,7 +130,7 @@ while True:
         pendown()
         fd(1)
         print('Current position =',pos())
-        if (pos_car[0] - stop_point[0]) >= -5 and (pos_car[0] - stop_point[0]) <= 5 and (pos_car[1] - stop_point[1]) >= -5 and (pos_car[1] - stop_point[1]) <= 5:
+        if (pos_car[0] - stop_point[0]) >= -15 and (pos_car[0] - stop_point[0]) <= 15 and (pos_car[1] - stop_point[1]) >= -15 and (pos_car[1] - stop_point[1]) <= 15:
                 print((pos_car[0] - stop_point[0]))
                 break
         print("-----------------------")
