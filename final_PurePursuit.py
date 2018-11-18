@@ -1,6 +1,7 @@
 from turtle import * 
 import numpy as np
 import math
+import time
 
 
 #setup
@@ -28,14 +29,20 @@ penup()
 start_point = [100,100]
 goto(start_point)
 path = np.array([[-150,0],[150,0]])
-stop_point = [-150,0]
+stop_point = [150,0]
 seth(180)
-speed(3)
+speed(7)
 showturtle()
 
-for i in range(91):
+
+while True: 
         #step 1 
         pos_car = pos() #(x,y) current position 
+        angle_H = heading()
+        fc_x = math.cos(math.radians(angle_H))
+        fc_y = math.sin(math.radians(angle_H)) 
+        fc = 52 * np.array([fc_x,fc_y])
+        frontCar = np.add(pos_car,fc)
 
         l1 = np.linalg.norm(pos_car-path[0])
         l2 = np.linalg.norm(pos_car-path[1])
@@ -54,6 +61,8 @@ for i in range(91):
                 print('Near Point is ',nearPoint)
                 print('Far Point is ',farPoint)
 
+
+
         #step 3 
         #vector A is Path 
         #vector B is Current position 
@@ -70,14 +79,18 @@ for i in range(91):
         vertical_Y = vecP[1]+nearPoint[1]
         print('Vector A is ',vecA)
         print('Vector B is ',vecB)
-        print('Vector B is ',vecP)
+        print('Vector P is ',vecP)
         print('Vertical Point is ({0:.3f},{1:.3f})'.format(vertical_X,vertical_Y))
 
         #step 4 
         #find the cut point with circle cut line 
+        if pos_car[1] <= 3 and pos_car[1] >= -3: 
+                        L = 5
+        else:
+                        L = 52
         y = 0 #equation of path 
-        x1 = -1*np.sqrt(-y**2 +2704) + pos_car[0] 
-        x2 = np.sqrt(-y**2 + 2704) + pos_car[0]  
+        x1 = -1*np.sqrt(-y**2 + L**2) + pos_car[0] 
+        x2 = np.sqrt(-y**2 + L**2) + pos_car[0]  
         print('Cut Point is ({0:.3f},{1:.3f})'.format(x1,x2))
 
         #step 5
@@ -88,39 +101,41 @@ for i in range(91):
         print('Select Goal Point = ',goalPoint)
 
         #step 6 
-        angle_H = heading()
-        fc_x = math.cos(math.radians(angle_H))
-        fc_y = math.sin(math.radians(angle_H)) 
-        fc = 52 * np.array([fc_x,fc_y])
-        fronCar = np.add(pos_car,fc) 
-        ld = np.linalg.norm(pos_car-goalPoint)
-        eld = np.linalg.norm(fronCar-goalPoint)
-        Alpha = np.arcsin(eld/ld)
-        if pos_car[1] <= 3 and pos_car[1] >= -3 : 
-                L = 10
-        else:
-                L =52
-        Zixmar = math.degrees((3*L)*np.sin(Alpha)/ld)
-        Theta = (3/L)*np.tan(Zixmar)
+        try :
+                ld = np.linalg.norm(pos_car-goalPoint)
+                eld = np.linalg.norm(frontCar-goalPoint)
+                print('eld = {0:.3f} ld = {1:.3f}'.format(eld,ld))
+                if eld > ld : 
+                        eld = ld   
+                        
+                Alpha = np.arcsin(eld/ld)
+                
 
-        if Zixmar > 30 :
-                Zixmar = 30 
-        else:
-                Zixmar = Zixmar
+                V =2
+                Zixmar = math.degrees(((V*L)*np.sin(Alpha))/ld)
+                Theta = (V/L)*np.tan(Zixmar)
+                
+                
+        except ValueError : 
+                print('NaN')
 
+        #step 7 
         speed(1)
         print('Zixmar =',Zixmar)
-
         if pos_car[1] >= 0 : 
-                angleCar = 180 + Zixmar
+                angleCar = 180+Zixmar
         else:
-                angleCar = 180 - Zixmar
+                angleCar = 180-Zixmar
         seth(angleCar)
         print('Heading =',heading())
-        fd(3)
+        pencolor('green')
+        pendown()
+        fd(1)
         print('Current position =',pos())
-        print('--------------------',i,'-----------------------')
-        
+        if (pos_car[0] - stop_point[0]) >= -5 and (pos_car[0] - stop_point[0]) <= 5 and (pos_car[1] - stop_point[1]) >= -5 and (pos_car[1] - stop_point[1]) <= 5:
+                print((pos_car[0] - stop_point[0]))
+                break
+        print("-----------------------")
 
 
 done()
