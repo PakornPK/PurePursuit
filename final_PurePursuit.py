@@ -29,11 +29,11 @@ start_point = [100,100]
 goto(start_point)
 path = np.array([[-150,0],[150,0]])
 stop_point = [-150,0]
-seth(225)
+seth(180)
 speed(3)
 showturtle()
 
-for i in range(135):
+for i in range(91):
         #step 1 
         pos_car = pos() #(x,y) current position 
 
@@ -96,14 +96,30 @@ for i in range(135):
         ld = np.linalg.norm(pos_car-goalPoint)
         eld = np.linalg.norm(fronCar-goalPoint)
         Alpha = np.arcsin(eld/ld)
-        Zixmar = math.degrees((2*52)*np.sin(Alpha)/ld)
-        Theta = (2/52)*np.tan(Zixmar)
+        if pos_car[1] <= 3 and pos_car[1] >= -3 : 
+                L = 15
+        else:
+                L =52
+        Zixmar = math.degrees((3*L)*np.sin(Alpha)/ld)
+        Theta = (3/L)*np.tan(Zixmar)
+
+        if Zixmar > 35 :
+                Zixmar = 35 
+        else:
+                Zixmar = Zixmar
 
         speed(1)
-        seth(180+Zixmar)
-        print(heading())
-        fd(2)
-        print(pos())
+        print('Zixmar =',Zixmar)
+
+        if pos_car[1] >= 0 : 
+                angleCar = 180 + Zixmar
+        else:
+                angleCar = 180 - Zixmar
+        seth(angleCar)
+        print('Heading =',heading())
+        fd(3)
+        print('Current position =',pos())
+        print('--------------------',i,'-----------------------')
         
 
 
