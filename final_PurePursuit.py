@@ -35,7 +35,7 @@ seth(220)
 speed(7)
 showturtle()
 
-for i in range(1):
+for i in range(11):
 #while True: 
         #step 1 
         pos_car = pos() #(x,y) current position 
@@ -91,7 +91,7 @@ for i in range(1):
         print("Shortate distance = ",shortate)
 
         #fix V and Goal  
-        Goal = [vertical_X - 50,verticalPoint[1]]
+        Goal = [vertical_X - 80,verticalPoint[1]]
         print("Pos = ",pos())
         print("goal = ",Goal)
 
@@ -99,10 +99,10 @@ for i in range(1):
         #find alpha 
         L = np.linalg.norm(np.array(Goal)-np.array(pos()))  
         eld = np.linalg.norm(np.array(Goal)-np.array(frontCar))
-        alpha = np.arcsin(eld/L)
+        #alpha = np.arcsin(eld/L)
         #r = (L**2)/(2*shortate)
-        K = (2*np.sin(alpha))/L
-        V = 100
+        K = (2/(L**2))*eld #(2*np.sin(alpha))/L
+        V = 10
         angle_H = heading()
         print('heading before calculate = ',angle_H)
         defX = V*np.cos(math.radians(angle_H))
