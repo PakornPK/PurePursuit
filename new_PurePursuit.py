@@ -1,6 +1,8 @@
 from turtle import * 
 import numpy as np
 import math 
+import time 
+import _thread
 
 def normDistance(x1,x2,y1,y2):
         x = (x2 - x1)**2 
