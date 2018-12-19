@@ -3,6 +3,7 @@ import numpy as np
 import math
 import time
 import _thread
+import os
 
   
 
@@ -39,6 +40,7 @@ showturtle()
 
 for i in range(1000):
 #while True: 
+        os.system('cls')
         try:
                 #step 1 
                 pos_car = pos() #(x,y) current position 
@@ -110,7 +112,10 @@ for i in range(1000):
                 #step 6
                 pendown()
                 pencolor('green')
-
+                print("new Pos = ",pos())
+                print('new Heading =',heading())
+                print ('taget dis = ',abs(np.linalg.norm(np.array(pos_car)-np.array(stop_point))))
+                print('-------------------',i,'------------------------------')
                 if pos_car[1] < 0  :
                         circle(-r,1,1)
                         
@@ -118,14 +123,17 @@ for i in range(1000):
                         circle(r,1,1)
                         
                 if angle_H < 135 and pos_car[1] < 0 : 
+
                         circle(r,2,1)
+
                 if angle_H > 225 and pos_car[1] > 0:
+
                         circle(-r,2,1)
-                print("new Pos = ",pos())
-                print('new Heading =',heading())
+                
                 if abs(np.linalg.norm(np.array(pos_car)-np.array(stop_point))) <= 15:
+
                         break
-                print('-------------------',i,'------------------------------')
+                
         except KeyboardInterrupt: 
                 print('interrupted!')
         
