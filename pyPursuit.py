@@ -23,19 +23,34 @@ class pyPursuit(tkinter.Frame):
         textPathBottom = self.CV.create_text(275,490,text='(250,500)')
         textSh = self.CV.create_text(50,20,text = 'Shortate = ' + str(self.shortate))
         textLH = self.CV.create_text(55,35,text = 'Look ahead = 80.0')
-        textL = self.CV.create_text(30,50,text = 'L = '+ str(np.linalg.norm(np.array(self.center)-np.array([250,self.center[1]]))))
+
+        ct = np.array(self.center)
+        lh = np.array([250.0,self.center[1]-80])
+        L = np.linalg.norm(ct-lh)
+        textL = self.CV.create_text(35,50,text = 'L = {0:.3f}'.format(L))
+        R = np.square(L)/(2*self.shortate)
+        D = R-self.shortate 
+        print(D)
+        textR = self.CV.create_text(35,65,text = 'R = {0:.3f}'.format(R))
         
         self.poly = self.rotate(self.poly,self.angle,tuple(self.center))
         self.carBot = self.CV.create_polygon(self.poly, fill = 'yellow' ,outline = 'black')
         textCenter = "({0},{1})".format(str(self.center[0]),str(self.center[1]))
         textcar = self.CV.create_text(self.center[0],self.center[1],text= textCenter)
-        lineSh = self.CV.create_line(self.center[0],self.center[1],250,self.center[1], fill = 'green')
+        lineR = self.CV.create_line(self.center[0],self.center[1],250+D,self.center[1], fill = 'green')
         lineLH = self.CV.create_line(250,self.center[1],250,self.center[1]-80, fill = 'green')
         lineL =self.CV.create_line(self.center[0],self.center[1],250,self.center[1]-80, fill = 'green')
+        textCenterR = self.CV.create_text(250+D,self.center[1],text = '({0},{1})'.format(250+D,self.center[1]))
+        circle = self.create_circle(250+D,self.center[1],R,self.CV)
+
+
+    def create_circle(self,x, y, r, canvasName): 
+        x0 = x - r
+        y0 = y - r
+        x1 = x + r
+        y1 = y + r
+        return canvasName.create_oval(x0, y0, x1, y1, outline = 'green')
         
-
-
-
         
     def rotate(self, points, angle, center): 
         angle = math.radians(angle)
