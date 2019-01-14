@@ -7,16 +7,18 @@ import math
 class pyPursuit(tkinter.Frame):
     def __init__(self, master): 
         super(pyPursuit, self).__init__(master)
-        self.poly = [[190,370],[210,370],[210,400],[190,400]]
         self.angle = 0 
+        self.poly = self.createCarBot(200,450,self.angle)
         self.center = self.find_center(self.poly)
         self.shortate = np.linalg.norm(self.center[0]-250) # path fig 
+        self.LH = 100
         self.grid()
         self.create_widgets()
 
     def create_widgets(self): 
         self.CV = tkinter.Canvas(width=500, height=500, bg = 'pink')
         self.CV.grid()
+        
 
         path_Line = self.CV.create_line(250,0,250,500)
         textPathTop = self.CV.create_text(270,10,text='(250,0)')
@@ -25,23 +27,28 @@ class pyPursuit(tkinter.Frame):
         textLH = self.CV.create_text(55,35,text = 'Look ahead = 80.0')
 
         ct = np.array(self.center)
-        lh = np.array([250.0,self.center[1]-80])
+        lh = np.array([250.0,self.center[1]-self.LH])
         L = np.linalg.norm(ct-lh)
         textL = self.CV.create_text(35,50,text = 'L = {0:.3f}'.format(L))
         R = np.square(L)/(2*self.shortate)
         D = R-self.shortate 
-        print(D)
         textR = self.CV.create_text(35,65,text = 'R = {0:.3f}'.format(R))
-        
+        textSpeed = self.CV.create_text(42,80, text = 'Speed = 2 m/s')
+
         self.poly = self.rotate(self.poly,self.angle,tuple(self.center))
         self.carBot = self.CV.create_polygon(self.poly, fill = 'yellow' ,outline = 'black')
-        textCenter = "({0},{1})".format(str(self.center[0]),str(self.center[1]))
-        textcar = self.CV.create_text(self.center[0],self.center[1],text= textCenter)
+        textCenter = "({0},{1},Φ={2})".format(self.center[0],self.center[1],self.angle)
+        textcar = self.CV.create_text(self.center[0],self.center[1]+5,text= textCenter)
         lineR = self.CV.create_line(self.center[0],self.center[1],250+D,self.center[1], fill = 'green')
-        lineLH = self.CV.create_line(250,self.center[1],250,self.center[1]-80, fill = 'green')
-        lineL =self.CV.create_line(self.center[0],self.center[1],250,self.center[1]-80, fill = 'green')
+        lineLH = self.CV.create_line(250,self.center[1],250,self.center[1]-self.LH, fill = 'green')
+        lineL = self.CV.create_line(self.center[0],self.center[1],250,self.center[1]-self.LH, fill = 'green')
         textCenterR = self.CV.create_text(250+D,self.center[1],text = '({0},{1})'.format(250+D,self.center[1]))
         circle = self.create_circle(250+D,self.center[1],R,self.CV)
+
+        for i in range(10): 
+            self.CV.move(self.carBot,10,-10)
+            time.sleep(1)
+            self.CV.update()
 
 
     def create_circle(self,x, y, r, canvasName): 
@@ -50,7 +57,10 @@ class pyPursuit(tkinter.Frame):
         x1 = x + r
         y1 = y + r
         return canvasName.create_oval(x0, y0, x1, y1, outline = 'green')
-        
+
+    def createCarBot(self,x,y,angle):  
+        Carbot = [[x-10,y-30],[x+10,y-30],[x+10,y],[x-10,y]]
+        return Carbot
         
     def rotate(self, points, angle, center): 
         angle = math.radians(angle)
