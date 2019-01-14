@@ -1,8 +1,26 @@
 import tkinter
 from tkinter import ttk 
+from threading import Thread
+from random import randint
 import numpy as np 
 import time 
 import math
+	
+class MyThread(Thread):
+    def __init__(self): 
+        Thread.__init__(self)
+        self.val = 1 
+        self.run()
+ 
+    def gui_run(self):
+        gui = tkinter.Tk()
+        gui.title('PyPursuit Simmulation Pure Pursuit Path tracking')
+        gui.geometry('500x500')
+        sim = pyPursuit(gui)
+        gui.mainloop()
+        
+        
+            
 
 class pyPursuit(tkinter.Frame):
     def __init__(self, master): 
@@ -23,8 +41,8 @@ class pyPursuit(tkinter.Frame):
         path_Line = self.CV.create_line(250,0,250,500)
         textPathTop = self.CV.create_text(270,10,text='(250,0)')
         textPathBottom = self.CV.create_text(275,490,text='(250,500)')
-        textSh = self.CV.create_text(50,20,text = 'Shortate = ' + str(self.shortate))
-        textLH = self.CV.create_text(55,35,text = 'Look ahead = {}'.format(self.LH))
+        textSh = self.CV.create_text(45,20,text = 'Shortate = ' + str(self.shortate))
+        textLH = self.CV.create_text(50,35,text = 'Look ahead = {}'.format(self.LH))
 
         ct = np.array(self.center)
         lh = np.array([250.0,self.center[1]-self.LH])
@@ -94,8 +112,4 @@ class pyPursuit(tkinter.Frame):
 
 if __name__ == "__main__":
 
-    gui = tkinter.Tk()
-    gui.title('PyPursuit Simmulation Pure Pursuit Path tracking')
-    gui.geometry('500x500')
-    sim = pyPursuit(gui)
-    gui.mainloop()
+    start = MyThread()
