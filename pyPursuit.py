@@ -6,18 +6,14 @@ import numpy as np
 import time 
 import math
 	
-class MyThread(Thread):
+"""class MyThread(Thread):
     def __init__(self): 
         Thread.__init__(self)
         self.val = 1 
         self.run()
  
     def gui_run(self):
-        gui = tkinter.Tk()
-        gui.title('PyPursuit Simmulation Pure Pursuit Path tracking')
-        gui.geometry('500x500')
-        sim = pyPursuit(gui)
-        gui.mainloop()
+        """
         
         
             
@@ -25,7 +21,7 @@ class MyThread(Thread):
 class pyPursuit(tkinter.Frame):
     def __init__(self, master): 
         super(pyPursuit, self).__init__(master)
-        self.angle = -90 
+        self.angle = -90
         self.center = [200,450]
         self.poly = self.createCarBot(self.center[0],self.center[1],self.angle)
         self.shortate = np.linalg.norm(self.center[0]-250) # path fig 
@@ -41,7 +37,7 @@ class pyPursuit(tkinter.Frame):
         path_Line = self.CV.create_line(250,0,250,500)
         textPathTop = self.CV.create_text(270,10,text='(250,0)')
         textPathBottom = self.CV.create_text(275,490,text='(250,500)')
-        textSh = self.CV.create_text(45,20,text = 'Shortate = ' + str(self.shortate))
+        textSh = self.CV.create_text(45,20,text = 'Shortate = {:.3f}' .format(self.shortate))
         textLH = self.CV.create_text(50,35,text = 'Look ahead = {}'.format(self.LH))
 
         ct = np.array(self.center)
@@ -57,30 +53,40 @@ class pyPursuit(tkinter.Frame):
         self.carBot = self.CV.create_polygon(self.poly, fill = 'yellow' ,outline = 'black')
         textCenter = "({0},{1},Φ={2})".format(self.center[0],self.center[1],self.angle)
         textcar = self.CV.create_text(self.center[0],self.center[1]+5,text= textCenter)
-        lineR = self.CV.create_line(self.center[0],self.center[1],250+D,self.center[1], fill = 'green')
         lineLH = self.CV.create_line(250,self.center[1],250,self.center[1]-self.LH, fill = 'green')
         lineL = self.CV.create_line(self.center[0],self.center[1],250,self.center[1]-self.LH, fill = 'green')
-        textCenterR = self.CV.create_text(250+D,self.center[1],text = '({0},{1})'.format(250+D,self.center[1]))
-        circle = self.create_circle(250+D,self.center[1],R,self.CV)
+
+        if self.center[0] < 250 : 
+            lineR = self.CV.create_line(self.center[0],self.center[1],250+D,self.center[1], fill = 'green')
+            textCenterR = self.CV.create_text(250+D,self.center[1],text = '({0},{1})'.format(250+D,self.center[1]))
+            circle = self.create_circle(250+D,self.center[1],R,self.CV)
+        else:
+            lineR = self.CV.create_line(self.center[0],self.center[1],250-D,self.center[1], fill = 'green')
+            textCenterR = self.CV.create_text(250-D,self.center[1],text = '({0},{1})'.format(250-D,self.center[1]))
+            circle = self.create_circle(250-D,self.center[1],R,self.CV)
 
         fc_x = math.cos(math.radians(self.angle))
         fc_y = math.sin(math.radians(self.angle)) 
         fc = 30 * np.array([fc_x,fc_y])
         frontCar = np.add(self.center,fc)
-        print(frontCar)
         lineFront = self.CV.create_line(frontCar[0],frontCar[1],lh[0],lh[1],fill = 'red')
         ld = L 
         eld = np.linalg.norm(frontCar-lh)
         alpha = math.degrees(np.arcsin(eld/ld))
+        K = (2*np.sin(math.radians(alpha)))/ld
+        zixmar = math.degrees(np.arctan(K*30))
+        textZixmar = self.CV.create_text(30,125, text = 'δ = {:.3f}'.format(zixmar))
         textELD = self.CV.create_text(35,95, text= 'eld = {:.3f}'.format(eld))
         textAlpha = self.CV.create_text(30,110, text= 'α = {:.3f}'.format(alpha))
-        """
-        for i in range(10):
-            self.CV.tag_raise(self.carBot) 
-            self.CV.move(self.carBot,10,-10)
-            time.sleep(1)
-            self.CV.update()
-        """
+
+        deff_x = math.degrees(0.2*np.cos(math.radians(self.angle)))
+        deff_y = math.degrees(0.2*np.sin(math.radians(self.angle)))
+        deff_phi = math.degrees((0.2/3)*np.tan(math.radians(zixmar)))
+        if  self.center[0] < 250 : 
+            print('{0:.3f},{1:.3f},{2:.3f}'.format(self.center[0]+deff_x,self.center[1]+deff_y,self.angle+deff_phi))
+        else:
+            print('{0:.3f},{1:.3f},{2:.3f}'.format(self.center[0]+deff_x,self.center[1]+deff_y,self.angle-deff_phi))
+       
 
     def create_circle(self,x, y, r, canvasName): 
         x0 = x - r
@@ -112,4 +118,9 @@ class pyPursuit(tkinter.Frame):
 
 if __name__ == "__main__":
 
-    start = MyThread()
+    gui = tkinter.Tk()
+    gui.title('PyPursuit Simmulation Pure Pursuit Path tracking')
+    gui.geometry('500x500')
+    sim = pyPursuit(gui)
+    gui.mainloop()
+        
