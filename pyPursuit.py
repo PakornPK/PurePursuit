@@ -40,53 +40,55 @@ class pyPursuit(tkinter.Frame):
         textSh = self.CV.create_text(45,20,text = 'Shortate = {:.3f}' .format(self.shortate))
         textLH = self.CV.create_text(50,35,text = 'Look ahead = {}'.format(self.LH))
 
-        ct = np.array(self.center)
-        lh = np.array([250.0,self.center[1]-self.LH])
-        L = np.linalg.norm(ct-lh)
-        textL = self.CV.create_text(35,50,text = 'L = {0:.3f}'.format(L))
-        R = np.square(L)/(2*self.shortate)
-        D = R-self.shortate 
-        textR = self.CV.create_text(35,65,text = 'R = {0:.3f}'.format(R))
-        textSpeed = self.CV.create_text(44,80, text = 'Speed = 2 m/s')
+        try : 
+            ct = np.array(self.center)
+            lh = np.array([250.0,self.center[1]-self.LH])
+            L = np.linalg.norm(ct-lh)
+            textL = self.CV.create_text(35,50,text = 'L = {0:.3f}'.format(L))
+            R = np.square(L)/(2*self.shortate)
+            D = R-self.shortate 
+            textR = self.CV.create_text(35,65,text = 'R = {0:.3f}'.format(R))
+            textSpeed = self.CV.create_text(44,80, text = 'Speed = 2 m/s')
 
-        self.poly = self.rotate(self.poly,self.angle,tuple(self.center))
-        self.carBot = self.CV.create_polygon(self.poly, fill = 'yellow' ,outline = 'black')
-        textCenter = "({0},{1},Φ={2})".format(self.center[0],self.center[1],self.angle)
-        textcar = self.CV.create_text(self.center[0],self.center[1]+5,text= textCenter)
-        lineLH = self.CV.create_line(250,self.center[1],250,self.center[1]-self.LH, fill = 'green')
-        lineL = self.CV.create_line(self.center[0],self.center[1],250,self.center[1]-self.LH, fill = 'green')
+            self.poly = self.rotate(self.poly,self.angle,tuple(self.center))
+            self.carBot = self.CV.create_polygon(self.poly, fill = 'yellow' ,outline = 'black')
+            textCenter = "({0},{1},Φ={2})".format(self.center[0],self.center[1],self.angle)
+            textcar = self.CV.create_text(self.center[0],self.center[1]+5,text= textCenter)
+            lineLH = self.CV.create_line(250,self.center[1],250,self.center[1]-self.LH, fill = 'green')
+            lineL = self.CV.create_line(self.center[0],self.center[1],250,self.center[1]-self.LH, fill = 'green')
 
-        if self.center[0] < 250 : 
-            lineR = self.CV.create_line(self.center[0],self.center[1],250+D,self.center[1], fill = 'green')
-            textCenterR = self.CV.create_text(250+D,self.center[1],text = '({0},{1})'.format(250+D,self.center[1]))
-            circle = self.create_circle(250+D,self.center[1],R,self.CV)
-        else:
-            lineR = self.CV.create_line(self.center[0],self.center[1],250-D,self.center[1], fill = 'green')
-            textCenterR = self.CV.create_text(250-D,self.center[1],text = '({0},{1})'.format(250-D,self.center[1]))
-            circle = self.create_circle(250-D,self.center[1],R,self.CV)
+            if self.center[0] < 250 : 
+                lineR = self.CV.create_line(self.center[0],self.center[1],250+D,self.center[1], fill = 'green')
+                textCenterR = self.CV.create_text(250+D,self.center[1],text = '({0},{1})'.format(250+D,self.center[1]))
+                circle = self.create_circle(250+D,self.center[1],R,self.CV)
+            else:
+                lineR = self.CV.create_line(self.center[0],self.center[1],250-D,self.center[1], fill = 'green')
+                textCenterR = self.CV.create_text(250-D,self.center[1],text = '({0},{1})'.format(250-D,self.center[1]))
+                circle = self.create_circle(250-D,self.center[1],R,self.CV)
 
-        fc_x = math.cos(math.radians(self.angle))
-        fc_y = math.sin(math.radians(self.angle)) 
-        fc = 30 * np.array([fc_x,fc_y])
-        frontCar = np.add(self.center,fc)
-        lineFront = self.CV.create_line(frontCar[0],frontCar[1],lh[0],lh[1],fill = 'red')
-        ld = L 
-        eld = np.linalg.norm(frontCar-lh)
-        alpha = math.degrees(np.arcsin(eld/ld))
-        K = (2*np.sin(math.radians(alpha)))/ld
-        zixmar = math.degrees(np.arctan(K*30))
-        textZixmar = self.CV.create_text(30,125, text = 'δ = {:.3f}'.format(zixmar))
-        textELD = self.CV.create_text(35,95, text= 'eld = {:.3f}'.format(eld))
-        textAlpha = self.CV.create_text(30,110, text= 'α = {:.3f}'.format(alpha))
+            fc_x = math.cos(math.radians(self.angle))
+            fc_y = math.sin(math.radians(self.angle)) 
+            fc = 30 * np.array([fc_x,fc_y])
+            frontCar = np.add(self.center,fc)
+            lineFront = self.CV.create_line(frontCar[0],frontCar[1],lh[0],lh[1],fill = 'red')
+            ld = L 
+            eld = np.linalg.norm(frontCar-lh)
+            alpha = math.degrees(np.arcsin(eld/ld))
+            K = (2*np.sin(math.radians(alpha)))/ld
+            zixmar = math.degrees(np.arctan(K*30))
+            textZixmar = self.CV.create_text(30,125, text = 'δ = {:.3f}'.format(zixmar))
+            textELD = self.CV.create_text(35,95, text= 'eld = {:.3f}'.format(eld))
+            textAlpha = self.CV.create_text(30,110, text= 'α = {:.3f}'.format(alpha))
 
-        deff_x = math.degrees(0.2*np.cos(math.radians(self.angle)))
-        deff_y = math.degrees(0.2*np.sin(math.radians(self.angle)))
-        deff_phi = math.degrees((0.2/3)*np.tan(math.radians(zixmar)))
-        if  self.center[0] < 250 : 
-            print('{0:.3f},{1:.3f},{2:.3f}'.format(self.center[0]+deff_x,self.center[1]+deff_y,self.angle+deff_phi))
-        else:
-            print('{0:.3f},{1:.3f},{2:.3f}'.format(self.center[0]+deff_x,self.center[1]+deff_y,self.angle-deff_phi))
-       
+            deff_x = math.degrees(0.2*np.cos(math.radians(self.angle)))
+            deff_y = math.degrees(0.2*np.sin(math.radians(self.angle)))
+            deff_phi = math.degrees((0.2/3)*np.tan(math.radians(zixmar)))
+            if  self.center[0] < 250 : 
+                print('{0:.3f},{1:.3f},{2:.3f}'.format(self.center[0]+deff_x,self.center[1]+deff_y,self.angle+deff_phi))
+            else:
+                print('{0:.3f},{1:.3f},{2:.3f}'.format(self.center[0]+deff_x,self.center[1]+deff_y,self.angle-deff_phi))
+        except: 
+            raise 
 
     def create_circle(self,x, y, r, canvasName): 
         x0 = x - r
