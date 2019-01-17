@@ -14,8 +14,8 @@ class pyPursuit(tkinter.Frame):
         super(pyPursuit, self).__init__(master)
         self.angle = -90
         self.center = [200,450]
-        self.shortate = np.linalg.norm(self.center[0]-250) # path fig 
-        self.LH = 40
+         # path fig 
+        self.LH = 45
         self.grid()
         self.CV = tkinter.Canvas(width=500, height=500, bg = 'pink')
         self.CV.grid()
@@ -24,6 +24,7 @@ class pyPursuit(tkinter.Frame):
     def create_widgets(self): 
         self.CV.delete('all')
         self.poly = self.createCarBot(self.center[0],self.center[1],self.angle)
+        self.shortate = np.linalg.norm(self.center[0]-250)
         path_Line = self.CV.create_line(250,0,250,500)
         textPathTop = self.CV.create_text(270,10,text='(250,0)')
         textPathBottom = self.CV.create_text(275,490,text='(250,500)')
@@ -31,8 +32,14 @@ class pyPursuit(tkinter.Frame):
         textLH = self.CV.create_text(50,35,text = 'Look ahead = {}'.format(self.LH))
 
         try : 
+            L = 0 
+            R = 0 
+            ct =0 
+            lh = 0
+            d =0
             ct = np.array(self.center)
             lh = np.array([250.0,self.center[1]-self.LH])
+            print(self.center[1]-self.LH)
             L = np.linalg.norm(ct-lh)
             textL = self.CV.create_text(35,50,text = 'L = {0:.3f}'.format(L))
             R = np.square(L)/(2*self.shortate)
@@ -43,7 +50,7 @@ class pyPursuit(tkinter.Frame):
             
             textCenter = "({0:.3f},{1:.3f},Φ={2:.3f})".format(self.center[0],self.center[1],self.angle)
             textcar = self.CV.create_text(self.center[0],self.center[1]+5,text= textCenter)
-            #lineLH = self.CV.create_line(250,self.center[1],250,self.center[1]-self.LH, fill = 'green')
+            lineLH = self.CV.create_line(250,self.center[1],250,self.center[1]-self.LH, fill = 'green')
             lineL = self.CV.create_line(self.center[0],self.center[1],250,self.center[1]-self.LH, fill = 'green')
 
             fc_x = math.cos(math.radians(self.angle))
@@ -63,15 +70,15 @@ class pyPursuit(tkinter.Frame):
             deff_x = math.degrees(0.2*np.cos(math.radians(self.angle)))
             deff_y = math.degrees(0.2*np.sin(math.radians(self.angle)))
             deff_phi = math.degrees((0.2/3)*np.tan(math.radians(zixmar)))
-            """
+            
             if self.center[0] < 250 : 
-                lineR = self.CV.create_line(self.center[0],self.center[1],250+D,self.center[1], fill = 'green')
-                textCenterR = self.CV.create_text(250+D,self.center[1],text = '({0:.3f},{1:.3f})'.format(250+D,self.center[1]))
-                circle = self.create_circle(250+D,self.center[1],R,self.CV)
+                lineR = self.CV.create_line(self.center[0],self.center[1],self.center[0]+R,self.center[1], fill = 'green')
+                textCenterR = self.CV.create_text(self.center[0]+R,self.center[1],text = '({0:.3f},{1:.3f})'.format(250+D,self.center[1]))
+                circle = self.create_circle(self.center[0]+R,self.center[1],R,self.CV)
             else:
-                lineR = self.CV.create_line(self.center[0],self.center[1],250-D,self.center[1], fill = 'green')
-                textCenterR = self.CV.create_text(250-D,self.center[1],text = '({0:.3f},{1:.3f})'.format(250-D,self.center[1]))
-                circle = self.create_circle(250-D,self.center[1],R,self.CV)"""
+                lineR = self.CV.create_line(self.center[0],self.center[1],self.center[0]-R,self.center[1], fill = 'green')
+                textCenterR = self.CV.create_text(self.center[0]-R,self.center[1],text = '({0:.3f},{1:.3f})'.format(250-D,self.center[1]))
+                circle = self.create_circle(self.center[0]-R,self.center[1],R,self.CV)
 
             self.poly = self.rotate(self.poly,self.angle,tuple(self.center))
             self.carBot = self.CV.create_polygon(self.poly, fill = 'yellow' ,outline = 'black')
@@ -80,13 +87,13 @@ class pyPursuit(tkinter.Frame):
                 self.center[0] = self.center[0]+deff_x
                 self.center[1] = self.center[1]+deff_y
                 self.angle = self.angle + deff_phi
-                print('X = {0:.3f}, Y = {1:.3f}, Φ = {2:.3f}'.format(self.center[0]-deff_x,self.center[1]+deff_y,self.angle+deff_phi))
+                #print('X = {0:.3f}, Y = {1:.3f}, Φ = {2:.3f}'.format(self.center[0]-deff_x,self.center[1]+deff_y,self.angle+deff_phi))
                 
             else:
                 self.center[0] = self.center[0]+deff_x
                 self.center[1] = self.center[1]+deff_y
                 self.angle = self.angle - deff_phi
-                print('X = {0:.3f}, Y = {1:.3f}, Φ = {2:.3f}'.format(self.center[0]+deff_x,self.center[1]+deff_y,self.angle-deff_phi))
+                #print('X = {0:.3f}, Y = {1:.3f}, Φ = {2:.3f}'.format(self.center[0]+deff_x,self.center[1]+deff_y,self.angle-deff_phi))
             
             
         except: 
