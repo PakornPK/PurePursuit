@@ -25,7 +25,11 @@ class pyPursuit(tkinter.Frame):
         self.CV.delete('all')
         self.poly = self.createCarBot(self.center[0],self.center[1],self.angle)
         self.shortate = np.linalg.norm(self.center[0]-250)
-        path_Line = self.CV.create_line(250,0,250,500)
+        
+        path_Line1 = self.CV.create_line(100,100,100,400)
+        path_Line2 = self.CV.create_line(400,100,400,400)
+        path_Line3 = self.CV.create_line(100,100,400,100)
+        path_Line4 = self.CV.create_line(100,400,400,400)
         textPathTop = self.CV.create_text(270,10,text='(250,0)')
         textPathBottom = self.CV.create_text(275,490,text='(250,500)')
         textSh = self.CV.create_text(45,20,text = 'Shortate = {:.3f}' .format(self.shortate))
@@ -36,7 +40,7 @@ class pyPursuit(tkinter.Frame):
             R = 0 
             ct =0 
             lh = 0
-            d =0
+            D =0
             ct = np.array(self.center)
             lh = np.array([250.0,self.center[1]-self.LH])
             print(self.center[1]-self.LH)
