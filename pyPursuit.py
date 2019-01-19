@@ -25,7 +25,7 @@ class pyPursuit(tkinter.Frame):
         self.CV.delete('all')
         self.poly = self.createCarBot(self.center[0],self.center[1],self.angle)
         self.shortate = np.linalg.norm(self.center[0]-250)
-        #path_Line = self.CV.create_line(250,0,250,500)
+        
         path_Line1 = self.CV.create_line(100,100,100,400)
         path_Line2 = self.CV.create_line(400,100,400,400)
         path_Line3 = self.CV.create_line(100,100,400,100)
