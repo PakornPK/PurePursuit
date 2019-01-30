@@ -17,7 +17,7 @@ class pyPursuit(tkinter.Frame):
         self.loop = True
         self.LH = 60
         self.grid()
-        self.CV = tkinter.Canvas(width=1000, height=500, bg = 'pink')
+        self.CV = tkinter.Canvas(width=750, height=500, bg = 'pink')
         self.CV.grid()
         self._run()
         #self.right_run()
@@ -475,6 +475,6 @@ if __name__ == "__main__":
 
     gui = tkinter.Tk()
     gui.title('PyPursuit Simmulation Pure Pursuit Path tracking')
-    gui.geometry('1000x500')
+    gui.geometry('750x500')
     sim = pyPursuit(gui)
 gui.mainloop()
