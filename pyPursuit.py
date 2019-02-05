@@ -15,18 +15,15 @@ class pyPursuit(tkinter.Frame):
         self.angle = 0
         self.center = [100,430]
         self.loop = True
-        self.LH = 60
+        self.LH = 30
         self.grid()
-        self.CV = tkinter.Canvas(width=1000, height=500, bg = 'pink')
+        self.CV = tkinter.Canvas(width=500, height=500, bg = 'pink')
         self.CV.grid()
         self._run()
-        #self.right_run()
-        #self.lelf_run()
-        #self.down_run()
-        #self.top_run()
+        
 
     def _run(self): 
-        for f in range(23):
+        for f in range(60):
             self.down_run()
             time.sleep(0.1)
             self.CV.update()
@@ -34,32 +31,32 @@ class pyPursuit(tkinter.Frame):
             self.d2r()
             time.sleep(0.1)
             self.CV.update()
-        for t in range(15):
+        for t in range(50):
             self.right_run()
             time.sleep(0.1)
             self.CV.update()
 
-        for fo in range(13):
+        for fo in range(10):
             self.d2r()
             time.sleep(0.1)
             self.CV.update()
 
-        for fi in range(20):
+        for fi in range(45):
             self.top_run()
             time.sleep(0.1)
             self.CV.update()
 
-        for si in range(13):
+        for si in range(10):
             self.d2r()
             time.sleep(0.1)
             self.CV.update()
 
-        for se in range(13):
+        for se in range(40):
             self.lelf_run()
             time.sleep(0.1)
             self.CV.update()
 
-        for si in range(10):
+        for si in range(15):
             self.d2r()
             time.sleep(0.1)
             self.CV.update()
@@ -107,7 +104,7 @@ class pyPursuit(tkinter.Frame):
 
             fc_x = math.cos(math.radians(self.angle))
             fc_y = math.sin(math.radians(self.angle)) 
-            fc = 30 * np.array([fc_x,fc_y])
+            fc = 15 * np.array([fc_x,fc_y])
             frontCar = np.add(self.center,fc)
             lineFront = self.CV.create_line(frontCar[0],frontCar[1],lh[0],lh[1],fill = 'red')
             ld = L 
@@ -123,9 +120,9 @@ class pyPursuit(tkinter.Frame):
             
                 
 
-            deff_x = math.degrees(0.2*np.cos(math.radians(self.angle)))
-            deff_y = math.degrees(0.2*np.sin(math.radians(self.angle)))
-            deff_phi = math.degrees((0.2/3)*np.tan(math.radians(zixmar)))
+            deff_x = math.degrees(0.1*np.cos(math.radians(self.angle)))
+            deff_y = math.degrees(0.1*np.sin(math.radians(self.angle)))
+            deff_phi = math.degrees((0.1/1.5)*np.tan(math.radians(zixmar)))
             
             if self.center[0] < 400 : 
                 lineR = self.CV.create_line(self.center[0],self.center[1],self.center[0]+R,self.center[1], fill = 'green')
@@ -196,7 +193,7 @@ class pyPursuit(tkinter.Frame):
 
             fc_x = math.cos(math.radians(self.angle))
             fc_y = math.sin(math.radians(self.angle)) 
-            fc = 30 * np.array([fc_x,fc_y])
+            fc = 15 * np.array([fc_x,fc_y])
             frontCar = np.add(self.center,fc)
             lineFront = self.CV.create_line(frontCar[0],frontCar[1],lh[0],lh[1],fill = 'red')
             ld = L 
@@ -208,9 +205,9 @@ class pyPursuit(tkinter.Frame):
             textELD = self.CV.create_text(35,95, text= 'eld = {:.3f}'.format(eld))
             textAlpha = self.CV.create_text(30,110, text= 'α = {:.3f}'.format(alpha))
 
-            deff_x = math.degrees(0.2*np.cos(math.radians(self.angle)))
-            deff_y = math.degrees(0.2*np.sin(math.radians(self.angle)))
-            deff_phi = math.degrees((0.2/3)*np.tan(math.radians(zixmar)))
+            deff_x = math.degrees(0.1*np.cos(math.radians(self.angle)))
+            deff_y = math.degrees(0.1*np.sin(math.radians(self.angle)))
+            deff_phi = math.degrees((0.1/1.5)*np.tan(math.radians(zixmar)))
             
             if self.center[0] < 100 : 
                 lineR = self.CV.create_line(self.center[0],self.center[1],self.center[0]+R,self.center[1], fill = 'green')
@@ -279,7 +276,7 @@ class pyPursuit(tkinter.Frame):
 
             fc_x = math.cos(math.radians(self.angle))
             fc_y = math.sin(math.radians(self.angle)) 
-            fc = 30 * np.array([fc_x,fc_y])
+            fc = 15 * np.array([fc_x,fc_y])
             frontCar = np.add(self.center,fc)
             lineFront = self.CV.create_line(frontCar[0],frontCar[1],lh[0],lh[1],fill = 'red')
             ld = L 
@@ -291,9 +288,9 @@ class pyPursuit(tkinter.Frame):
             textELD = self.CV.create_text(35,95, text= 'eld = {:.3f}'.format(eld))
             textAlpha = self.CV.create_text(30,110, text= 'α = {:.3f}'.format(alpha))
 
-            deff_x = math.degrees(0.2*np.cos(math.radians(self.angle)))
-            deff_y = math.degrees(0.2*np.sin(math.radians(self.angle)))
-            deff_phi = math.degrees((0.2/3)*np.tan(math.radians(zixmar)))
+            deff_x = math.degrees(0.1*np.cos(math.radians(self.angle)))
+            deff_y = math.degrees(0.1*np.sin(math.radians(self.angle)))
+            deff_phi = math.degrees((0.1/1.5)*np.tan(math.radians(zixmar)))
             
             if self.center[1] < 400 : 
                 lineR = self.CV.create_line(self.center[0],self.center[1],self.center[0],self.center[1]+R, fill = 'green')
@@ -362,7 +359,7 @@ class pyPursuit(tkinter.Frame):
 
             fc_x = math.cos(math.radians(self.angle))
             fc_y = math.sin(math.radians(self.angle)) 
-            fc = 30 * np.array([fc_x,fc_y])
+            fc = 15 * np.array([fc_x,fc_y])
             frontCar = np.add(self.center,fc)
             lineFront = self.CV.create_line(frontCar[0],frontCar[1],lh[0],lh[1],fill = 'red')
             ld = L 
@@ -374,9 +371,9 @@ class pyPursuit(tkinter.Frame):
             textELD = self.CV.create_text(35,95, text= 'eld = {:.3f}'.format(eld))
             textAlpha = self.CV.create_text(30,110, text= 'α = {:.3f}'.format(alpha))
 
-            deff_x = math.degrees(0.2*np.cos(math.radians(self.angle)))
-            deff_y = math.degrees(0.2*np.sin(math.radians(self.angle)))
-            deff_phi = math.degrees((0.2/3)*np.tan(math.radians(zixmar)))
+            deff_x = math.degrees(0.1*np.cos(math.radians(self.angle)))
+            deff_y = math.degrees(0.1*np.sin(math.radians(self.angle)))
+            deff_phi = math.degrees((0.1/1.5)*np.tan(math.radians(zixmar)))
             
             if self.center[1] < 100 : 
                 lineR = self.CV.create_line(self.center[0],self.center[1],self.center[0],self.center[1]+R, fill = 'green')
@@ -424,9 +421,9 @@ class pyPursuit(tkinter.Frame):
 
         try : 
            
-            deff_x = math.degrees(0.2*np.cos(math.radians(self.angle)))
-            deff_y = math.degrees(0.2*np.sin(math.radians(self.angle)))
-            deff_phi = math.degrees((0.2/3)*np.tan(math.radians(60)))
+            deff_x = math.degrees(0.1*np.cos(math.radians(self.angle)))
+            deff_y = math.degrees(0.1*np.sin(math.radians(self.angle)))
+            deff_phi = math.degrees((0.1/1.5)*np.tan(math.radians(60)))
 
             self.poly = self.rotate(self.poly,self.angle,tuple(self.center))
             self.carBot = self.CV.create_polygon(self.poly, fill = 'yellow' ,outline = 'black')
@@ -449,7 +446,7 @@ class pyPursuit(tkinter.Frame):
         return canvasName.create_oval(x0, y0, x1, y1, outline = 'green')
 
     def createCarBot(self,x,y,angle):  
-        Carbot = [[x,y-10],[x+30,y-10],[x+30,y+10],[x,y+10]]
+        Carbot = [[x,y-5],[x+15,y-5],[x+15,y+5],[x,y+5]]
         return Carbot
         
     def rotate(self, points, angle, center): 
@@ -475,6 +472,6 @@ if __name__ == "__main__":
 
     gui = tkinter.Tk()
     gui.title('PyPursuit Simmulation Pure Pursuit Path tracking')
-    gui.geometry('1000x500')
+    gui.geometry('500x500')
     sim = pyPursuit(gui)
 gui.mainloop()
