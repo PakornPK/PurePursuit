@@ -4,20 +4,22 @@
 #include <iostream>
 #include <sstream>
 #include <math.h>
+#include "std_msgs/String.h" 
 
 #define PI 3.14159265
 
 using namespace std; 
 using namespace cv; 
 
+
 class cam{
     public: 
         double norm(Point2f A,Point2f B);
         Point midpoint(const Point& a, const Point& b);
-
+        
         cam(){
-            VideoCapture cap(CV_CAP_ANY);
-                
+            VideoCapture cap(CV_CAP_ANY);  
+
                 if (!cap.isOpened()){
                     cout << "Cannot open the video cam" << endl;  
                 }
@@ -37,11 +39,17 @@ class cam{
                 int biggestContourIdx (-1);
                 float biggestContourArea (0);
                 double base_car[3],head_car[3]; 
+                double x_ref,y_ref,body_car,x_base,pX,pY,l_base,angle_car;
+                ros::NodeHandle n;
+                ros::Publisher pos_x = n.advertise<std_msgs::String>("position_x", 100);
+                ros::Publisher pos_y = n.advertise<std_msgs::String>("position_y", 100);
+                ros::Publisher angle_pub = n.advertise<std_msgs::String>("angle_cam", 100);
+                ros::Rate loop_rate(10);
                 
-                 
-                while(1){
+                
+                while(ros::ok()){
                     bool bSuccess = cap.read(img); 
-
+                     
                     if(!bSuccess){
                         cout << "Cannot read img frome video stream" << endl; 
                         break; 
@@ -115,7 +123,7 @@ class cam{
                             line(img,pos_car,front_car,Scalar(0,0,255),1,8,0);
 
                             
-                            double x_ref,y_ref,body_car,x_base,pX,pY,l_base,angle_car;
+                            
                             body_car = norm(pos_car,front_car);
 
                             x_ref = front_car.x;
@@ -127,7 +135,21 @@ class cam{
 
                             angle_car = acos(l_base/body_car) * 180.0 / PI; 
 
-                            cout << angle_car << endl;  
+
+                            std_msgs::String ang_msg,x_msg,y_msg;
+                            stringstream ang,xx,yy;
+                            ang << angle_car ;
+                            xx << pos_car.x; 
+                            yy << pos_car.y; 
+                            ang_msg.data = ang.str(); 
+                            x_msg.data = xx.str(); 
+                            y_msg.data = yy.str(); 
+                            pos_x.publish(x_msg);
+                            pos_y.publish(y_msg);
+                            angle_pub.publish(ang_msg);
+                            ROS_INFO("X = %s , Y = %s , Angle = %s \n", x_msg.data.c_str(),y_msg.data.c_str(),ang_msg.data.c_str());
+                            ros::spinOnce();
+                            loop_rate.sleep();
 
                             line(img,pos_car,Point(x_ref,y_ref),Scalar(255,0,0),1,8,0);
                             line(img,front_car,Point(x_ref,y_ref),Scalar(255,0,0),1,8,0);
@@ -137,8 +159,10 @@ class cam{
 
                     Rect r = Rect(50,50,540,380);
                     rectangle(img,r,Scalar(0,255,0),2,8,0);
-                        
+                     
+
                     imshow("Normal image" ,img);
+                    
 
                     if (waitKey(30) == 27) {
                         cout << "esc key is pressed by user" << endl;
@@ -172,9 +196,9 @@ Point cam::midpoint(const Point& a, const Point& b) {
 int main(int argc, char **argv)
 {
     system("clear");
-    ros::init(argc, argv, "internal_cam_test");
-    cam cam_object; 
+    ros::init(argc, argv, "cam_node");
+    cam cam_object;     
 
-    ROS_INFO("Cam_Tested!"); 
+    ROS_INFO("Camera Closed!"); 
     return 0;
 }
