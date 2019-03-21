@@ -39,7 +39,7 @@ class cam{
                 int biggestContourIdx (-1);
                 float biggestContourArea (0);
                 double base_car[3],head_car[3]; 
-                double x_ref,y_ref,body_car,x_base,pX,pY,l_base,angle_car;
+                double x_ref,y_ref,body_car,x_base,pX,pY,l_base,angle_car,attitude_car;
                 ros::NodeHandle n;
                 ros::Publisher pos_x = n.advertise<std_msgs::String>("position_x", 100);
                 ros::Publisher pos_y = n.advertise<std_msgs::String>("position_y", 100);
@@ -120,7 +120,7 @@ class cam{
                             
                             circle(img,front_car,3,Scalar(0,0,255),3,8,0);
                             circle(img,pos_car,3,Scalar(0,0,255),3,8,0);
-                            line(img,pos_car,front_car,Scalar(0,0,255),1,8,0);
+                            line(img,pos_car,front_car,Scalar(0,0,255),2,8,0);
 
                             
                             
@@ -135,10 +135,29 @@ class cam{
 
                             angle_car = acos(l_base/body_car) * 180.0 / PI; 
 
+                            if(pos_car.x < front_car.x && pos_car.y > front_car.y )
+                            {
+                                attitude_car = angle_car; 
+                            }
+                            else if (pos_car.x > front_car.x && pos_car.y > front_car.y)
+                            {
+                                attitude_car = 180.0 - angle_car;
+                            }
+                            else if (pos_car.x > front_car.x && pos_car.y < front_car.y) 
+                            {
+                                attitude_car = 180.0 - angle_car;
+                            }
+                            else if (pos_car.x < front_car.x && pos_car.y < front_car.y)
+                            {
+                                attitude_car = -1*angle_car;
+                            }
+                            
+                            
+                            
 
                             std_msgs::String ang_msg,x_msg,y_msg;
                             stringstream ang,xx,yy;
-                            ang << angle_car ;
+                            ang << attitude_car ;
                             xx << pos_car.x; 
                             yy << pos_car.y; 
                             ang_msg.data = ang.str(); 
@@ -151,8 +170,8 @@ class cam{
                             ros::spinOnce();
                             loop_rate.sleep();
 
-                            line(img,pos_car,Point(x_ref,y_ref),Scalar(255,0,0),1,8,0);
-                            line(img,front_car,Point(x_ref,y_ref),Scalar(255,0,0),1,8,0);
+                            line(img,pos_car,Point(x_ref,y_ref),Scalar(255,255,0),2,8,0);
+                            line(img,front_car,Point(x_ref,y_ref),Scalar(255,255,0),2,8,0);
                             
                         }
                     }
