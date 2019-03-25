@@ -1,10 +1,13 @@
 #include <ros/ros.h> 
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/ocl.hpp>
 #include <iostream>
 #include <sstream>
 #include <math.h>
 #include "std_msgs/String.h" 
+#include <cmath>
 
 #define PI 3.14159265
 
@@ -12,24 +15,26 @@ using namespace std;
 using namespace cv; 
 
 
+
 class cam{
     public: 
-        double norm(Point2f A,Point2f B);
+        float norm(Point2f A,Point2f B);
         Point midpoint(const Point& a, const Point& b);
         
         cam(){
             VideoCapture cap(CV_CAP_ANY);  
 
+
                 if (!cap.isOpened()){
                     cout << "Cannot open the video cam" << endl;  
                 }
 
-                double dWidth = cap.get(CV_CAP_PROP_FRAME_WIDTH);
-                double dHeight = cap.get(CV_CAP_PROP_FRAME_HEIGHT); 
+                float dWidth = cap.get(CV_CAP_PROP_FRAME_WIDTH );
+                float dHeight = cap.get(CV_CAP_PROP_FRAME_HEIGHT); 
 
-                cout << "Frame size : " << dWidth << "x" << dHeight << endl;
+                cout << "Frame size : " << floor(dWidth) << "x" << floor(dHeight) << endl;
                 
-                Mat img,gray,bw,new_img,drawing;
+                Mat img,gray,bw,drawing;
                 drawing = Mat::zeros( bw.size(), CV_8UC3 );
                 vector< vector<Point> > contours;
                 vector<Vec4i> hierarchy;
@@ -38,13 +43,13 @@ class cam{
                 int CV_THRESH_BINARY (0); 
                 int biggestContourIdx (-1);
                 float biggestContourArea (0);
-                double base_car[3],head_car[3]; 
-                double x_ref,y_ref,body_car,x_base,pX,pY,l_base,angle_car,attitude_car;
+                float base_car[3],head_car[3]; 
+                float x_ref,y_ref,body_car,x_base,pX,pY,l_base,angle_car,attitude_car;
                 ros::NodeHandle n;
                 ros::Publisher pos_x = n.advertise<std_msgs::String>("position_x", 100);
                 ros::Publisher pos_y = n.advertise<std_msgs::String>("position_y", 100);
                 ros::Publisher angle_pub = n.advertise<std_msgs::String>("angle_cam", 100);
-                ros::Rate loop_rate(10);
+                ros::Rate loop_rate(100);
                 
                 
                 while(ros::ok()){
@@ -54,14 +59,14 @@ class cam{
                         cout << "Cannot read img frome video stream" << endl; 
                         break; 
                     }
-                    new_img = img/5; 
+                     
                     cvtColor(img,gray, CV_BGR2GRAY); 
                     threshold(gray, bw, thr, 255, CV_THRESH_BINARY);
                     findContours(bw,contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
                     
                     
                     
-                    for( int i = 0; i< contours.size(); i++ )
+                    for( int i = 0; i < contours.size(); i++ )
                     {
                         Scalar color = Scalar(0, 100, 0);
                         drawContours( drawing, contours, i, color, 1, 8, hierarchy, 0, Point() );
@@ -85,9 +90,9 @@ class cam{
                         approxPolyDP(contours[i], approxTriangle, arcLength(Mat(contours[i]), true)*0.05, true);
                         if(approxTriangle.size() == 3){
 
-                            line(img,approxTriangle[0],approxTriangle[1],Scalar(0,255,255),3,8,0);
-                            line(img,approxTriangle[1],approxTriangle[2],Scalar(0,255,255),3,8,0);
-                            line(img,approxTriangle[2],approxTriangle[0],Scalar(0,255,255),3,8,0);
+                            line(img,approxTriangle[0],approxTriangle[1],Scalar(0,255,255),2,8,0);
+                            line(img,approxTriangle[1],approxTriangle[2],Scalar(0,255,255),2,8,0);
+                            line(img,approxTriangle[2],approxTriangle[0],Scalar(0,255,255),2,8,0);
 
                             base_car[0] = norm(approxTriangle[0],approxTriangle[1]);
                             base_car[1] = norm(approxTriangle[1],approxTriangle[2]);
@@ -118,11 +123,10 @@ class cam{
                                 front_car = approxTriangle[2];
                             }
                             
-                            circle(img,front_car,3,Scalar(0,0,255),3,8,0);
-                            circle(img,pos_car,3,Scalar(0,0,255),3,8,0);
+                            circle(img,front_car,3,Scalar(0,0,255),2,8,0);
+                            circle(img,pos_car,3,Scalar(0,0,255),2,8,0);
                             line(img,pos_car,front_car,Scalar(0,0,255),2,8,0);
 
-                            
                             
                             body_car = norm(pos_car,front_car);
 
@@ -183,7 +187,7 @@ class cam{
                     imshow("Normal image" ,img);
                     
 
-                    if (waitKey(30) == 27) {
+                    if (waitKey(1) == 27) {
                         cout << "esc key is pressed by user" << endl;
                         break;
                     }
@@ -197,8 +201,8 @@ class cam{
 
 };
 
-double cam::norm(Point2f A, Point2f B){
-    double X,Y,l; 
+float cam::norm(Point2f A, Point2f B){
+    float X,Y,l; 
     X = A.x - B.x; 
     Y = A.y - B.y;
     l = sqrt(pow(X,2)+pow(Y,2)); 
@@ -215,6 +219,7 @@ Point cam::midpoint(const Point& a, const Point& b) {
 int main(int argc, char **argv)
 {
     system("clear");
+    //cv::ocl::Device(context.device(0))
     ros::init(argc, argv, "cam_node");
     cam cam_object;     
 
