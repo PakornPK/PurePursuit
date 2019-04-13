@@ -17,6 +17,7 @@ class pyPursuit(tkinter.Frame):
         self.loop = True
         self.LH = 30
         self.grid()
+
         self.CV = tkinter.Canvas(width=500, height=500, bg = 'pink')
         self.CV.grid()
         self._run()
