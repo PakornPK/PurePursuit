@@ -2,7 +2,7 @@
 
 #define PI 3.14159265359
 
-double pathCal::norm(double *pointA[2], double *pointB[2]){
+double pathCal::norm(double pointA[2], double pointB[2]){
     double defX,defY,dis; 
     defX = pointA[0]-pointB[0];
     defY = pointA[1]-pointB[1];
