@@ -12,7 +12,7 @@ double pathCal::norm(double *pointA[2], double *pointB[2]){
 
 double pathCal::radianCal(double L, double shortate){
     double R; 
-    R = sqrt(L)/(2*shortate); 
+    R = pow(L,2)/(2*shortate); 
     return  R; 
 }
 
